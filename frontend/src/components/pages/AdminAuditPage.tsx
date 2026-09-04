@@ -1,0 +1,74 @@
+import React from 'react';
+import { FileCode, Shield, CheckCircle2, Lock } from 'lucide-react';
+
+export interface AuditLogItem {
+  id: string;
+  timestamp: string;
+  user: string;
+  role: string;
+  action: string;
+  target: string;
+  result: 'SUCCESS' | 'DENIED' | 'FAILED';
+  ip: string;
+}
+
+const AUDIT_LOGS: AuditLogItem[] = [
+  { id: 'aud-01', timestamp: '2026-09-04 03:28:10', user: 'Kunal (Admin)', role: 'ADMIN', action: 'Update Defence Policy POL-001', target: 'Adaptive Defence Engine', result: 'SUCCESS', ip: '10.0.0.5' },
+  { id: 'aud-02', timestamp: '2026-09-04 03:25:44', user: 'Sarah Chen', role: 'SOC_ANALYST', action: 'View Attack Path Graph', target: 'Attack Path Engine', result: 'SUCCESS', ip: '10.0.0.12' },
+  { id: 'aud-03', timestamp: '2026-09-04 03:22:15', user: 'Marcus Vance', role: 'SECURITY_ENGINEER', action: 'Activate Adaptive Decoy DB', target: 'Deception Zone VLAN 99', result: 'SUCCESS', ip: '10.0.0.15' },
+  { id: 'aud-04', timestamp: '2026-09-04 03:18:02', user: 'Audit Observer', role: 'VIEWER', action: 'Attempt Decoy Activation', target: 'Deception Engine', result: 'DENIED', ip: '10.0.0.99' }
+];
+
+export const AdminAuditPage: React.FC = () => {
+  return (
+    <div className="space-y-6 font-mono select-none">
+      <div className="border-b border-slate-800 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-xl font-extrabold tracking-tight text-white uppercase">
+            Admin — Immutable System Audit Logs
+          </h1>
+          <p className="text-xs text-slate-400 font-sans mt-0.5">
+            Read-only cryptographic audit trail recording all operator actions and security state mutations
+          </p>
+        </div>
+
+        <span className="badge-green">READ-ONLY AUDIT TRAIL</span>
+      </div>
+
+      <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
+        <table className="w-full text-left text-xs font-mono">
+          <thead className="bg-slate-950 border-b border-slate-800 text-slate-400 text-[10px] uppercase">
+            <tr>
+              <th className="p-4">Timestamp</th>
+              <th className="p-4">Operator</th>
+              <th className="p-4">Role</th>
+              <th className="p-4">Action Description</th>
+              <th className="p-4">Target System</th>
+              <th className="p-4">Result</th>
+              <th className="p-4">IP Address</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-800/60">
+            {AUDIT_LOGS.map((log) => (
+              <tr key={log.id} className="hover:bg-slate-800/40 transition-colors">
+                <td className="p-4 text-slate-400">{log.timestamp}</td>
+                <td className="p-4 font-bold text-white">{log.user}</td>
+                <td className="p-4 text-orange-400 font-bold">{log.role}</td>
+                <td className="p-4 text-slate-200">{log.action}</td>
+                <td className="p-4 text-purple-300">{log.target}</td>
+                <td className="p-4">
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                    log.result === 'SUCCESS' ? 'badge-green' : 'badge-red'
+                  }`}>
+                    {log.result}
+                  </span>
+                </td>
+                <td className="p-4 text-slate-500 font-mono">{log.ip}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
